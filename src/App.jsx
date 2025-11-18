@@ -1,6 +1,7 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CategoryGrid from './components/CategoryGrid'
+import ProductGrid from './components/ProductGrid'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <main className="pt-28">
         <Hero />
         <CategoryGrid />
+        <ProductGrid />
       </main>
       <footer className="mt-16 border-t border-black/10">
         <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-[var(--eclipse-charcoal)]/70 grid md:grid-cols-3 gap-6">
