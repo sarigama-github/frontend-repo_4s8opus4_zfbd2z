@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion'
+import React, { Suspense } from 'react'
+
+const MoonHalo = React.lazy(() => import('./MoonHalo'))
 
 export default function Hero() {
   return (
@@ -26,22 +29,14 @@ export default function Hero() {
         </motion.p>
 
         <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.3}} className="mt-10 flex items-center justify-center gap-4">
-          <a href="#" className="px-5 py-3 rounded-full bg-[var(--stellar-lavender)] text-[var(--eclipse-charcoal)] font-medium shadow hover:shadow-md transition">New Arrivals</a>
-          <a href="#" className="px-5 py-3 rounded-full bg-black/5 text-[var(--eclipse-charcoal)] font-medium hover:bg-black/10 transition">Explore Universe</a>
+          <a href="#products" className="px-5 py-3 rounded-full bg-[var(--stellar-lavender)] text-[var(--eclipse-charcoal)] font-medium shadow hover:shadow-md transition">New Arrivals</a>
+          <a href="#universe" className="px-5 py-3 rounded-full bg-black/5 text-[var(--eclipse-charcoal)] font-medium hover:bg-black/10 transition">Explore Universe</a>
         </motion.div>
       </div>
 
-      {/* Placeholder moon visual */}
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="absolute -z-0 w-[70vmin] h-[70vmin] rounded-full"
-        style={{
-          background: 'radial-gradient(circle at 30% 30%, #fff, #F7E7E9 40%, #EDE2F3 65%, #E5D6F3 85%)',
-          boxShadow: 'inset -60px -60px 120px rgba(0,0,0,0.06), 0 40px 120px rgba(199,184,234,0.45)'
-        }}
-      />
+      <Suspense fallback={null}>
+        <MoonHalo />
+      </Suspense>
     </section>
   )
 }

@@ -1,12 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
 const API = import.meta.env.VITE_BACKEND_URL || ''
+
+// Lazy import viewer to keep initial JS small
+const ThreeViewer = (props) => {
+  const Comp = React.lazy(() => import('./ThreeViewer'))
+  return (
+    <Suspense fallback={<div className="w-full aspect-square rounded-2xl bg-black/5 grid place-items-center">Loading 3D…</div>}>
+      <Comp {...props} />
+    </Suspense>
+  )
+}
 
 export default function PDP() {
   const { slug } = useParams()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [email] = useState('guest@eclatdelune.com')
 
   useEffect(() => {
     const load = async () => {
@@ -23,13 +34,23 @@ export default function PDP() {
     load()
   }, [slug])
 
+  const earnPhotons = async () => {
+    try {
+      await fetch(`${API}/api/universe/earn`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, kind: 'view_3d', amount: 5 })
+      })
+    } catch (e) { console.error(e) }
+  }
+
   if (loading) return <div className="mx-auto max-w-6xl px-6 py-12">Loading…</div>
   if (!product) return <div className="mx-auto max-w-6xl px-6 py-12">Product not found. <Link to="/" className="underline">Back</Link></div>
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 grid md:grid-cols-2 gap-8">
       <div className="rounded-2xl overflow-hidden bg-white shadow">
-        <img src={product.images?.[0]} alt={product.title} className="w-full object-cover" />
+        <ThreeViewer glbUrl={product.glb_url} onInteract={earnPhotons} />
       </div>
       <div>
         <h1 className="text-3xl font-serif text-[var(--eclipse-charcoal)]">{product.title}</h1>
